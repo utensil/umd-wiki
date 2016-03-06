@@ -59,7 +59,7 @@
     "vue-router": "^0.7.10",
     "vue-style-loader": "^1.0.0",
     "vueboot": "^0.3.0",
-    "vuex": "^0.2.0",
+    "vuex": "^0.5.1",
     "webpack": "^1.12.2",
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.6.0"
