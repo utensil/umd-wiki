@@ -31,6 +31,18 @@ app.use(devMiddleware)
 app.use(hotMiddleware)
 // serve pure static assets
 app.use('/static', express.static('./static'))
+// customization: mock config.json
+app.get('/config.json', function(req, res){
+  res.json({
+    useSideMenu: true,
+    lineBreaks: 'gfm',
+    additionalFooterText: '',
+    anchorCharacter: '&#x2693;',
+    title: 'Ultra Markdown Wiki',
+    showSearch: false,
+    baseUrl: 'static/'
+  });
+})
 
 app.listen(8080, function (err) {
   if (err) {

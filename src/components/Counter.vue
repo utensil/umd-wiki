@@ -5,6 +5,7 @@
     <button @click="decrement">-</button>
     <button @click="incrementIfOdd">Increment if odd</button>
     <button @click="incrementAsync">Increment async</button>
+    <button @click="loadConfigAsync">Load config async</button>
   </div>
 </template>
 

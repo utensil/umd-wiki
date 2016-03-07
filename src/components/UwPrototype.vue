@@ -34,15 +34,4 @@ export default {
   }
 }
 
-window.fetch('static/test.xls').then(res => {
-  res.blob().then(b => {
-    console.log(b)
-  })
-})
-
-window.fetch('static/test.md').then(res => {
-  res.text().then(t => {
-    console.log(t)
-  })
-})
 </script>

@@ -3,11 +3,19 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+const defaultConfig = {
+  title: '',
+  lineBreaks: 'gfm',
+  additionalFooterText: '',
+  anchorCharacter: '&para;',
+  useSideMenu: true,
+  parseHeader: false,
+  showSearch: false,
+  baseUrl: 'static/'
+}
+
 const state = {
-  config: {
-    showSearch: false,
-    title: 'Ultra Markdown Wiki'
-  },
+  config: defaultConfig,
   count: 123
 }
 
@@ -19,6 +27,10 @@ const mutations = {
   DECREMENT (state) {
     console.log(state)
     state.count--
+  },
+  CONFIG_LOADED (state, config) {
+    console.log(state, config)
+    state.config = config
   }
 }
 
