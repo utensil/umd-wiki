@@ -1,6 +1,6 @@
 <template lang="jade">
 nav.navbar.navbar-fixed-top.navbar-dark.bg-inverse
-  a.navbar-brand(href='#') {{title}}
+  a.navbar-brand(href='#') {{config.title}}
   button.navbar-toggler.hidden-sm-up(type='button', data-toggle='collapse', data-target='#exCollapsingNavbar')
     | &#9776;
   #exCollapsingNavbar.collapse.navbar-toggleable-xs
@@ -17,7 +17,7 @@ nav.navbar.navbar-fixed-top.navbar-dark.bg-inverse
             a.dropdown-item(href='#!test.md') Test
             .dropdown-divider
             a.dropdown-item(href='#!test.md') Another Test
-    form.form-inline.pull-xs-right(v-if='showSearch')
+    form.form-inline.pull-xs-right(v-if='config.showSearch')
       input.form-control(type='text', placeholder='Search')
       button.btn.btn-success-outline(type='submit') Search
 </template>
@@ -29,9 +29,20 @@ export default {
   // this is where we retrieve state from the store
   vuex: {
     state: {
-      title: state => state.title,
-      showSearch: state => state.showSearch
+      config: state => state.config
     }
   }
 }
+
+window.fetch('static/test.xls').then(res => {
+  res.blob().then(b => {
+    console.log(b)
+  })
+})
+
+window.fetch('static/test.md').then(res => {
+  res.text().then(t => {
+    console.log(t)
+  })
+})
 </script>

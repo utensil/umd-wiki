@@ -4,8 +4,10 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
-  showSearch: false,
-  title: 'Ultra Markdown Wiki',
+  config: {
+    showSearch: false,
+    title: 'Ultra Markdown Wiki'
+  },
   count: 123
 }
 
