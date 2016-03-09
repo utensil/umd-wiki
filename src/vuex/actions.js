@@ -22,12 +22,6 @@ export const loadConfigAsync = ({ dispatch }) => {
     })
   })
 
-  window.fetch('static/test.md').then(res => {
-    res.text().then(t => {
-      console.log(t)
-    })
-  })
-
   window.fetch('config.json').then(res => {
     res.json().then(config => {
       dispatch('CONFIG_LOADED', config)
