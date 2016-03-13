@@ -16,9 +16,9 @@
               a.nav-link.dropdown-toggle(data-toggle='dropdown', aria-haspopup='true', aria-expanded='false', href='#') Pages
               .dropdown-menu
                 h6.dropdown-header Dropdown header
-                a.dropdown-item(href='#!test.md') Test
+                a.dropdown-item(href='#!static/test.md') Test
                 .dropdown-divider
-                a.dropdown-item(href='#!test.md') Another Test
+                a.dropdown-item(href='#!static/mp.md') Another Test
         form.form-inline.pull-xs-right(v-if='config.showSearch')
           input.form-control(type='text', placeholder='Search')
           button.btn.btn-success-outline(type='submit') Search
@@ -41,8 +41,6 @@
 
 </style>
 <script>
-window.mdc.map = true
-
 export default {
   // this is where we retrieve state from the store
   vuex: {
@@ -50,18 +48,22 @@ export default {
       config: state => state.config
     }
   },
-  ready () {
-    let route = this.$route
+  route: {
+    data () {
+      window.mdc.map = true
 
-    console.log(route.path, route.params, route.query)
+      let route = this.$route
 
-    window.fetch(route.path).then(res => {
-      res.text().then(t => {
-        // console.log(t)
+      console.log(route.path, route.params, route.query)
 
-        window.mdc.init(t, false)
+      window.fetch(route.path).then(res => {
+        res.text().then(t => {
+          // console.log(t)
+
+          window.mdc.init(t, false)
+        })
       })
-    })
+    }
   }
 }
 
