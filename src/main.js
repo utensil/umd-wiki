@@ -1,3 +1,12 @@
+
+require('bootstrap/dist/css/bootstrap.css')
+require('tether/dist/css/tether.min.css')
+require('markdown-core/dist/markdown-core.min.css')
+require('script!jquery/dist/jquery.min.js')
+require('script!tether/dist/js/tether.min.js')
+require('script!bootstrap/dist/js/bootstrap.min.js')
+require('script!markdown-core/dist/markdown-core.min.js')
+
 import Vue from 'vue'
 // import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
