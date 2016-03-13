@@ -43,20 +43,25 @@
 <script>
 window.mdc.map = true
 
-window.fetch('static/mp.md').then(res => {
-  res.text().then(t => {
-    console.log(t)
-
-    window.mdc.init(t, true)
-  })
-})
-
 export default {
   // this is where we retrieve state from the store
   vuex: {
     state: {
       config: state => state.config
     }
+  },
+  ready () {
+    let route = this.$route
+
+    console.log(route.path, route.params, route.query)
+
+    window.fetch(route.path).then(res => {
+      res.text().then(t => {
+        // console.log(t)
+
+        window.mdc.init(t, false)
+      })
+    })
   }
 }
 
