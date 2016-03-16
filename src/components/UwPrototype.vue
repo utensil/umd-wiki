@@ -16,9 +16,9 @@
               a.nav-link.dropdown-toggle(data-toggle='dropdown', aria-haspopup='true', aria-expanded='false', href='#') Pages
               .dropdown-menu
                 h6.dropdown-header Dropdown header
-                a.dropdown-item(href='#!static/test.md') Test
+                a.dropdown-item(href='#!test.md') Test
                 .dropdown-divider
-                a.dropdown-item(href='#!static/mp.md') Another Test
+                a.dropdown-item(href='#!mp.md') Another Test
         form.form-inline.pull-xs-right(v-if='config.showSearch')
           input.form-control(type='text', placeholder='Search')
           button.btn.btn-success-outline(type='submit') Search
@@ -41,6 +41,8 @@
 
 </style>
 <script>
+import {parseMarkdown, NavigationRenderer} from '../lib/ultra_markdown'
+
 export default {
   // this is where we retrieve state from the store
   vuex: {
@@ -54,9 +56,9 @@ export default {
 
       let route = this.$route
 
-      console.log(route.path, route.params, route.query)
+      console.log(route.path, route.params, route.query, this.config.baseUrl)
 
-      window.fetch(route.path).then(res => {
+      window.fetch(`${this.config.baseUrl}/${route.path}`).then(res => {
         res.text().then(t => {
           // console.log(t)
 
@@ -64,6 +66,14 @@ export default {
         })
       })
     }
+  },
+  ready () {
+    window.fetch(`${this.config.baseUrl}/navigation.md`).then(res => {
+      res.text().then(t => {
+        parseMarkdown(t)
+        console.log(new NavigationRenderer().render(t))
+      })
+    })
   }
 }
 

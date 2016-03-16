@@ -50,6 +50,7 @@
     "karma-spec-reporter": "0.0.24",
     "karma-webpack": "^1.7.0",
     "markdown-core": "^0.5.4",
+    "markdown-it": "^6.0.0",
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
     "node-sass": "^3.4.2",
