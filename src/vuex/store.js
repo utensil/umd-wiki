@@ -4,19 +4,20 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const defaultConfig = {
-  title: '',
+  title: 'Dummy Title',
   lineBreaks: 'gfm',
   additionalFooterText: '',
   anchorCharacter: '&para;',
   useSideMenu: true,
   parseHeader: false,
   showSearch: false,
-  baseUrl: 'static/'
+  baseUrl: ''
 }
 
 const state = {
   config: defaultConfig,
-  count: 123
+  count: 123,
+  currentMdPath: 'index.md'
 }
 
 const mutations = {
@@ -31,6 +32,9 @@ const mutations = {
   CONFIG_LOADED (state, config) {
     console.log(state, config)
     state.config = config
+  },
+  MD_PATH_CHANGED (state, newPath) {
+    state.currentMdPath = newPath
   }
 }
 

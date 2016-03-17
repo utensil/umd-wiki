@@ -6,4 +6,5 @@
   * [<i class="fa fa-smile-o"></i> Test](test.md)
   - - - -
   * # Another header
-  * [<i class="fa fa-smile-o"></i> Another Test](mp.md)
+  * [Another Test](mp.md)
+  * [External Link](https://github.com/markdown-it/linkify-it)

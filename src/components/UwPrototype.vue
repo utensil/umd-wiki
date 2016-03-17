@@ -41,24 +41,37 @@
 
 </style>
 <script>
-import {parseMarkdown, NavigationRenderer} from '../lib/ultra_markdown'
+import {printMarkdownAst, NavigationBarParser} from '../lib/ultra_markdown'
+import * as actions from '../vuex/actions'
 
 export default {
   // this is where we retrieve state from the store
   vuex: {
     state: {
-      config: state => state.config
+      config: state => state.config,
+      currentMdPath: state => state.currentMdPath
     }
   },
   route: {
     data () {
-      window.mdc.map = true
-
       let route = this.$route
 
       console.log(route.path, route.params, route.query, this.config.baseUrl)
 
-      window.fetch(`${this.config.baseUrl}/${route.path}`).then(res => {
+      actions.changeMdPath(this.$store, route.path)
+    }
+  },
+  computed: {
+    currentMdFullPath: function () {
+      return `${this.config.baseUrl}/${this.currentMdPath}`.replace('//', '/')
+    }
+  },
+  ready () {
+    const fetchAndRenderMarkdown = () => {
+      let path = this.currentMdFullPath
+      console.log('fetchAndRenderMarkdown', path)
+
+      window.fetch(path).then(res => {
         res.text().then(t => {
           // console.log(t)
 
@@ -66,14 +79,21 @@ export default {
         })
       })
     }
-  },
-  ready () {
-    window.fetch(`${this.config.baseUrl}/navigation.md`).then(res => {
-      res.text().then(t => {
-        parseMarkdown(t)
-        console.log(new NavigationRenderer().render(t))
+
+    actions.loadConfigAsync(this.$store).then(config => {
+      window.fetch(`${config.baseUrl}/navigation.md`).then(res => {
+        res.text().then(t => {
+          printMarkdownAst(t)
+          let nav = new NavigationBarParser().parse(t)
+
+          console.log(nav)
+        })
+      }).then(() => {
+        fetchAndRenderMarkdown()
       })
     })
+
+    this.$watch('currentMdPath', fetchAndRenderMarkdown)
   }
 }
 
@@ -82,7 +102,7 @@ export default {
 <style lang="scss">
 
 #md-all {
-  margin-top: 70px;
+  margin-top: 54px;
 
   .markdown-body {
     margin-left: 20px;

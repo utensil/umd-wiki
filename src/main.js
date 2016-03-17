@@ -27,6 +27,10 @@ Vue.use(VueRouter)
 //   components: { App }
 // })
 
+Vue.config.debug = process.env['NODE_ENV'] !== 'production'
+
+console.log(Vue.config)
+
 var router = new VueRouter()
 
 router.map({
@@ -35,4 +39,4 @@ router.map({
   }
 })
 
-router.start(App, 'body')
+router.start(App, 'app')

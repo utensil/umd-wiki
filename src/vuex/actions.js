@@ -14,17 +14,22 @@ export const incrementAsync = ({ dispatch }) => {
 }
 
 export const loadConfigAsync = ({ dispatch }) => {
-  console.log('loadConfigAsync')
+  // console.log('loadConfigAsync')
 
-  window.fetch('static/test.xls').then(res => {
-    res.blob().then(b => {
-      console.log(b)
-    })
-  })
+  // window.fetch('static/test.xls').then(res => {
+  //   res.blob().then(b => {
+  //     console.log(b)
+  //   })
+  // })
 
-  window.fetch('config.json').then(res => {
-    res.json().then(config => {
+  return window.fetch('config.json').then(res => {
+    return res.json().then(config => {
       dispatch('CONFIG_LOADED', config)
+      return config
     })
   })
+}
+
+export const changeMdPath = ({dispatch}, newPath) => {
+  dispatch('MD_PATH_CHANGED', newPath)
 }
