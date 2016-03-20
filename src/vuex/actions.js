@@ -16,13 +16,13 @@ export const incrementAsync = ({ dispatch }) => {
 export const loadConfigAsync = ({ dispatch }) => {
   // console.log('loadConfigAsync')
 
-  // window.fetch('static/test.xls').then(res => {
+  // fetch('static/test.xls').then(res => {
   //   res.blob().then(b => {
   //     console.log(b)
   //   })
   // })
 
-  return window.fetch('config.json').then(res => {
+  return fetch('config.json').then(res => {
     return res.json().then(config => {
       dispatch('CONFIG_LOADED', config)
       return config
@@ -32,4 +32,8 @@ export const loadConfigAsync = ({ dispatch }) => {
 
 export const changeMdPath = ({dispatch}, newPath) => {
   dispatch('MD_PATH_CHANGED', newPath)
+}
+
+export const changeNavContent = ({dispatch}, newNavContent) => {
+  dispatch('NAV_CHANGED', newNavContent)
 }

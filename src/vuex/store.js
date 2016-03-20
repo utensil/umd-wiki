@@ -17,7 +17,8 @@ const defaultConfig = {
 const state = {
   config: defaultConfig,
   count: 123,
-  currentMdPath: 'index.md'
+  currentMdPath: 'index.md',
+  nav: null
 }
 
 const mutations = {
@@ -30,11 +31,16 @@ const mutations = {
     state.count--
   },
   CONFIG_LOADED (state, config) {
-    console.log(state, config)
+    console.log(config)
     state.config = config
   },
   MD_PATH_CHANGED (state, newPath) {
     state.currentMdPath = newPath
+  },
+  NAV_CHANGED (state, newNavContent) {
+    console.log(JSON.stringify(newNavContent.menus, null, 2))
+    state.nav = newNavContent
+    state.config.title = newNavContent.title
   }
 }
 

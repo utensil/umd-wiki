@@ -1,9 +1,9 @@
-# Utrla Markdown Wiki
+# Navigation Title
 
 [Pages]()
 
   * # Header
-  * [<i class="fa fa-smile-o"></i> Test](test.md)
+  * [<i class="fa fa-smile-o"></i> __Test__](test.md)
   - - - -
   * # Another header
   * [Another Test](mp.md)
