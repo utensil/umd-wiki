@@ -70,6 +70,7 @@ module.exports = {
   },
   plugins: [
     new webpack.ProvidePlugin({
+      '_': 'lodash',
       'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
     })
   ],
