@@ -1,0 +1,14 @@
+#md-content-row .tocible {
+  font-family: Microsoft YaHei;
+  font-size: 16px;
+  font-weight: normal;
+  border-radius: 5px;
+  width: 199px;
+  left: 20px;
+}
+
+#md-content-row .tocible .tocible_header{
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  color: #333;
+}

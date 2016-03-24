@@ -29,8 +29,7 @@
                 h1
         #md-content-container
           #md-content-row.row
-            #md-left-column.col-md-2
-            #md-content.col-md-10
+            #md-content.col-md-12
               article#preview.markdown-body
               article#cache.markdown-body(style="display: none")
 </template>
@@ -40,6 +39,7 @@
 <script>
 import {printMarkdownAst, NavigationBarParser} from '../lib/ultra_markdown'
 import * as actions from '../vuex/actions'
+import {StageChain} from '../lib/stage'
 
 export default {
   // this is where we retrieve state from the store
@@ -72,8 +72,8 @@ export default {
       fetch(path).then(res => {
         res.text().then(t => {
           // console.log(t)
-
           window.mdc.init(t, false)
+          new StageChain(['pregimmick', 'gimmick', 'postgimmick']).run()
         })
       })
     }

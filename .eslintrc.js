@@ -17,6 +17,7 @@ module.exports = {
   },
   'globals': {
     '_': false,
-    'fetch': false
+    'fetch': false,
+    '$': false
   }
 }

@@ -14,6 +14,7 @@ import VueRouter from 'vue-router'
 
 import App from './App'
 import UwPrototype from './components/UwPrototype'
+import {init} from './init'
 
 // Vue.use(VueResource)
 Vue.use(VueRouter)
@@ -28,6 +29,13 @@ Vue.use(VueRouter)
 // })
 
 Vue.config.debug = process.env['NODE_ENV'] !== 'production'
+
+init()
+
+require('./vendor/jquery.tocible/jquery.tocible.css')
+require('script!./vendor/jquery.tocible/jquery.tocible.min.js')
+require('script!./plugins/gimmick.tocible.js')
+require('./css/wiki.css')
 
 console.log(Vue.config)
 
