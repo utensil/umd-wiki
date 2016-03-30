@@ -37,7 +37,7 @@
 
 </style>
 <script>
-import {printMarkdownAst, NavigationBarParser} from '../lib/ultra_markdown'
+import {NavigationBarParser} from '../lib/ultra_markdown'
 import * as actions from '../vuex/actions'
 import {StageChain} from '../lib/stage'
 
@@ -54,9 +54,11 @@ export default {
     data () {
       let route = this.$route
 
-      console.log(route.path, route.params, route.query, this.config.baseUrl)
+      let path = route.path === '' ? 'index.md' : route.path
 
-      actions.changeMdPath(this.$store, route.path)
+      console.log(path, route.params, route.query, this.config.baseUrl)
+
+      actions.changeMdPath(this.$store, path)
     }
   },
   computed: {
@@ -81,7 +83,7 @@ export default {
     actions.loadConfigAsync(this.$store).then(config => {
       fetch(`${config.baseUrl}/navigation.md`).then(res => {
         res.text().then(t => {
-          printMarkdownAst(t)
+          // printMarkdownAst(t)
           let nav = new NavigationBarParser().parse(t)
 
           actions.changeNavContent(this.$store, nav)

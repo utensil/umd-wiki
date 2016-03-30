@@ -23,22 +23,28 @@ const state = {
 
 const mutations = {
   INCREMENT (state) {
-    console.log(state)
+    console.debug(state)
     state.count++
   },
   DECREMENT (state) {
-    console.log(state)
+    console.debug(state)
     state.count--
   },
   CONFIG_LOADED (state, config) {
-    console.log(config)
+    console.debug(config)
     state.config = config
+
+    try {
+      window.$.md.config = config
+    } catch (e) {
+      console.error(e)
+    }
   },
   MD_PATH_CHANGED (state, newPath) {
     state.currentMdPath = newPath
   },
   NAV_CHANGED (state, newNavContent) {
-    console.log(JSON.stringify(newNavContent.menus, null, 2))
+    console.debug(JSON.stringify(newNavContent.menus, null, 2))
     state.nav = newNavContent
     state.config.title = newNavContent.title
   }

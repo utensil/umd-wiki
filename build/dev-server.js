@@ -1,6 +1,7 @@
 var express = require('express')
 var webpack = require('webpack')
 var config = require('./webpack.dev.conf')
+var fs = require('fs')
 
 var app = express()
 var compiler = webpack(config)
@@ -31,6 +32,14 @@ app.use(devMiddleware)
 app.use(hotMiddleware)
 // serve pure static assets
 app.use('/static', express.static('./static'))
+
+var TEST_WIKI_PATH = 'wiki'
+var hasWikiDirectory = fs.statSync('./' + TEST_WIKI_PATH).isDirectory()
+
+if (hasWikiDirectory) {
+  app.use('/' + TEST_WIKI_PATH, express.static('./' + TEST_WIKI_PATH))
+}
+
 // customization: mock config.json
 app.get('/config.json', function(req, res){
   res.json({
@@ -40,7 +49,7 @@ app.get('/config.json', function(req, res){
     anchorCharacter: '&#x2693;',
     title: 'Ultra Markdown Wiki',
     showSearch: false,
-    baseUrl: 'static'
+    baseUrl: (hasWikiDirectory ? TEST_WIKI_PATH : 'static')
   });
 })
 

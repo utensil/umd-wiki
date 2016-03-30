@@ -35,6 +35,7 @@ init()
 require('./vendor/jquery.tocible/jquery.tocible.css')
 require('script!./vendor/jquery.tocible/jquery.tocible.min.js')
 require('script!./plugins/gimmick.tocible.js')
+require('script!./plugins/gimmick.linkfixer.js')
 require('./css/wiki.css')
 
 console.log(Vue.config)
