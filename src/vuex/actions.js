@@ -40,3 +40,7 @@ export const changeMdPath = ({dispatch}, newPath) => {
 export const changeNavContent = ({dispatch}, newNavContent) => {
   dispatch('NAV_CHANGED', newNavContent)
 }
+
+export const changeWikiHtml = ({dispatch}, newWikiHtml) => {
+  dispatch('WIKI_HTML_CHANGED', newWikiHtml)
+}

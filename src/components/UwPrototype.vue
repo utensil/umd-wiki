@@ -30,7 +30,7 @@
         #md-content-container
           #md-content-row.row
             #md-content.col-md-12
-              article#preview.markdown-body
+              article#preview.markdown-body {{{wikiContent}}}
               article#cache.markdown-body(style="display: none")
 </template>
 <style lang="sass">
@@ -49,7 +49,8 @@ export default {
     state: {
       config: state => state.config,
       currentMdPath: state => state.currentMdPath,
-      nav: state => state.nav
+      nav: state => state.nav,
+      wikiContent: state => state.wikiContent
     }
   },
   route: {
@@ -76,8 +77,25 @@ export default {
       fetch(path).then(res => {
         res.text().then(t => {
           // log('render markdown', t)
-          window.mdc.init(t, false)
-          new StageChain(['pregimmick', 'gimmick', 'postgimmick']).run()
+          // window.mdc.init(t, false)
+          let mdc = window.mdc
+          // let oldImageRenderRule = mdc.renderer.rules.image
+          // mdc.renderer.rules.image = function (e, t, n, r, i) {
+          //   log('render image', e, t, n, r, i)
+          //   return oldImageRenderRule(e, t, n, r, i)
+          // }
+          // let oldRenderToken = mdc.renderer.renderToken
+          // mdc.renderer.renderToken = function (e, t, n) {
+          //   log('render token', e, t, n)
+          //   return oldRenderToken(e, t, n)
+          // }
+
+          let rendered = mdc.render(t)
+          actions.changeWikiHtml(this.$store, rendered)
+
+          setTimeout(function () {
+            new StageChain(['pregimmick', 'gimmick', 'postgimmick']).run()
+          })
         })
       })
     }

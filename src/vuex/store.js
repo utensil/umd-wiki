@@ -21,7 +21,8 @@ const state = {
   config: defaultConfig,
   count: 123,
   currentMdPath: 'index.md',
-  nav: null
+  nav: null,
+  wikiContent: ''
 }
 
 const mutations = {
@@ -47,9 +48,15 @@ const mutations = {
     state.currentMdPath = newPath
   },
   NAV_CHANGED (state, newNavContent) {
-    log('NAV_CHANGED', JSON.stringify(newNavContent.menus, null, 2))
+    log('NAV_CHANGED', newNavContent.menus)
     state.nav = newNavContent
     state.config.title = newNavContent.title
+  },
+  WIKI_HTML_CHANGED (state, newWikiHtml) {
+    log('WIKI_HTML_CHANGED', {
+      html: newWikiHtml
+    })
+    state.wikiContent = newWikiHtml
   }
 }
 
