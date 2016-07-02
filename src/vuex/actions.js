@@ -38,6 +38,7 @@ export const changeMdPath = ({dispatch}, newPath) => {
 }
 
 export const changeNavContent = ({dispatch}, newNavContent) => {
+  window.document.title = newNavContent.title
   dispatch('NAV_CHANGED', newNavContent)
 }
 

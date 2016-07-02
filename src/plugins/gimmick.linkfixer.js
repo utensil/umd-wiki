@@ -31,7 +31,7 @@ $.md.stage('pregimmick').subscribe(function (done) {
 
   $('#md-content a').each(function (index, linkElement) {
     var url = $(linkElement).attr('href')
-    console.log('link:', url)
+    // console.log('link:', url)
     var urlInfo = processUrl(url)
 
     $(linkElement).attr('href', urlInfo.url)
@@ -42,7 +42,7 @@ $.md.stage('pregimmick').subscribe(function (done) {
 
   $('#md-content img').each(function (index, linkElement) {
     var url = $(linkElement).attr('src')
-    console.log('image:', url)
+    // console.log('image:', url)
     var urlInfo = processUrl(url)
 
     $(linkElement).attr('src', urlInfo.url)

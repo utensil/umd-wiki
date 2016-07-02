@@ -41,7 +41,7 @@ const mutations = {
     try {
       window.$.md.config = config
     } catch (e) {
-      log('CONFIG_LOADED', e)
+      log('window.$.md.config error', e)
     }
   },
   MD_PATH_CHANGED (state, newPath) {
