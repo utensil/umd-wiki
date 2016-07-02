@@ -68,12 +68,21 @@ module.exports = {
       }
     ]
   },
+  node: {
+    fs: 'empty'
+  },
   plugins: [
     new webpack.ProvidePlugin({
       '_': 'lodash',
       'debug': 'debug',
       'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
     })
+  ],
+  externals: [
+    {
+      './cptable': 'var cptable',
+      './jszip': 'jszip'
+    }
   ],
   eslint: {
     formatter: require('eslint-friendly-formatter')
