@@ -34,7 +34,13 @@ app.use(hotMiddleware)
 app.use('/static', express.static('./static'))
 
 var TEST_WIKI_PATH = 'wiki'
-var hasWikiDirectory = fs.statSync('./' + TEST_WIKI_PATH).isDirectory()
+var hasWikiDirectory = false
+
+try {
+  hasWikiDirectory = fs.statSync('./' + TEST_WIKI_PATH).isDirectory()
+} catch (e) {
+  hasWikiDirectory = false
+}
 
 if (hasWikiDirectory) {
   app.use('/' + TEST_WIKI_PATH, express.static('./' + TEST_WIKI_PATH))
