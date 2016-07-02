@@ -48,4 +48,8 @@ router.map({
   }
 })
 
+router.redirect({
+  '*': 'index.md'
+})
+
 router.start(App, 'app')
