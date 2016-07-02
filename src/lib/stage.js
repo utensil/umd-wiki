@@ -10,13 +10,13 @@ export const RENDER_STAGES = [
   'fetch', 'transform', 'post_transform', 'pregimmick', 'gimmick', 'postgimmick'
 ]
 
-let g_registry = null
+let stageRegistry = null
 
 export class StageRegistery {
 
   static instance () {
-    g_registry = g_registry || new StageRegistery()
-    return g_registry
+    stageRegistry = stageRegistry || new StageRegistery()
+    return stageRegistry
   }
 
   constructor () {
