@@ -2,6 +2,8 @@
 
 // TODO doc
 
+const log = debug('stage')
+
 export const BOOT_STAGES = [
   'init', 'load', 'skel', 'render', 'ready'
 ]
@@ -113,7 +115,7 @@ export class Stage {
   }
 
   start () {
-    console.debug(`running stage ${this.name}...`)
+    log('stage', this.name)
     this.numRunning = this.subscribers.length
 
     this.subscribers.forEach(fn => {

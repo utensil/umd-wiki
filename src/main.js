@@ -19,6 +19,8 @@ import {init} from './init'
 // Vue.use(VueResource)
 Vue.use(VueRouter)
 
+const log = debug('main')
+
 /* eslint-disable no-new */
 // new Vue({
 //   el: 'body',
@@ -38,7 +40,7 @@ require('script!./plugins/gimmick.tocible.js')
 require('script!./plugins/gimmick.linkfixer.js')
 require('./css/wiki.css')
 
-console.log(Vue.config)
+log('Vue.config', Vue.config)
 
 var router = new VueRouter()
 

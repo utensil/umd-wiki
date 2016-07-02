@@ -3,6 +3,9 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+const log = debug('store')
+log.log = console.debug.bind(console)
+
 const defaultConfig = {
   title: 'Dummy Title',
   lineBreaks: 'gfm',
@@ -23,28 +26,28 @@ const state = {
 
 const mutations = {
   INCREMENT (state) {
-    console.debug(state)
+    log(state)
     state.count++
   },
   DECREMENT (state) {
-    console.debug(state)
+    log(state)
     state.count--
   },
   CONFIG_LOADED (state, config) {
-    console.debug(config)
+    log('CONFIG_LOADED', config)
     state.config = config
 
     try {
       window.$.md.config = config
     } catch (e) {
-      console.error(e)
+      log('CONFIG_LOADED', e)
     }
   },
   MD_PATH_CHANGED (state, newPath) {
     state.currentMdPath = newPath
   },
   NAV_CHANGED (state, newNavContent) {
-    console.debug(JSON.stringify(newNavContent.menus, null, 2))
+    log('NAV_CHANGED', JSON.stringify(newNavContent.menus, null, 2))
     state.nav = newNavContent
     state.config.title = newNavContent.title
   }

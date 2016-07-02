@@ -6,6 +6,7 @@ const MD_OPTIONS = {
 }
 
 const MD = new MarkdownIt(MD_OPTIONS)
+const log = debug('ultra_markdown')
 
 const logToken = (token, indentDepth) => {
   indentDepth = indentDepth || 0
@@ -15,7 +16,7 @@ const logToken = (token, indentDepth) => {
     indentString += ' '
   }
 
-  console.log(`${indentString}${arrowString} ${token.type}\t${token.content}\t${token.tag}`, token)
+  log('', `${indentString}${arrowString} ${token.type}\t${token.content}\t${token.tag}`, token)
 }
 
 const logChild = (token, iterateCount) => {

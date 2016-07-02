@@ -41,6 +41,8 @@ import {NavigationBarParser} from '../lib/ultra_markdown'
 import * as actions from '../vuex/actions'
 import {StageChain} from '../lib/stage'
 
+const log = debug('wiki')
+
 export default {
   // this is where we retrieve state from the store
   vuex: {
@@ -56,7 +58,7 @@ export default {
 
       let path = route.path === '' ? 'index.md' : route.path
 
-      console.log(path, route.params, route.query, this.config.baseUrl)
+      log('route', path, route.params, route.query, this.config.baseUrl)
 
       actions.changeMdPath(this.$store, path)
     }
@@ -69,11 +71,11 @@ export default {
   ready () {
     const fetchAndRenderMarkdown = () => {
       let path = this.currentMdFullPath
-      console.log('fetchAndRenderMarkdown', path)
+      log('fetch content', path)
 
       fetch(path).then(res => {
         res.text().then(t => {
-          // console.log(t)
+          // log('render markdown', t)
           window.mdc.init(t, false)
           new StageChain(['pregimmick', 'gimmick', 'postgimmick']).run()
         })
@@ -81,7 +83,9 @@ export default {
     }
 
     actions.loadConfigAsync(this.$store).then(config => {
-      fetch(`${config.baseUrl}/navigation.md`).then(res => {
+      let path = `${config.baseUrl}/navigation.md`
+      log('fetch nav', path)
+      fetch(path).then(res => {
         res.text().then(t => {
           // printMarkdownAst(t)
           let nav = new NavigationBarParser().parse(t)

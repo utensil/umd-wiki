@@ -1,3 +1,5 @@
+// const log = debug('actions')
+
 export const increment = ({ dispatch }) => dispatch('INCREMENT')
 export const decrement = ({ dispatch }) => dispatch('DECREMENT')
 
@@ -22,6 +24,7 @@ export const loadConfigAsync = ({ dispatch }) => {
   //   })
   // })
 
+  // log('fetch config')
   return fetch('config.json').then(res => {
     return res.json().then(config => {
       dispatch('CONFIG_LOADED', config)

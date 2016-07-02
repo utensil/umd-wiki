@@ -71,6 +71,7 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({
       '_': 'lodash',
+      'debug': 'debug',
       'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
     })
   ],

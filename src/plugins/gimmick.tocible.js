@@ -14,7 +14,7 @@ $.md.stage('pregimmick').subscribe(function(done) {
         removeClass('col-md-10 col-md-offset-2').
         addClass('col-md-12');
     });
-    
+
   }
 
   function show_tocible() {
@@ -62,8 +62,8 @@ $.md.stage('pregimmick').subscribe(function(done) {
       // click the arrow on tocible makes it disappear
       $('.tocible_header').click(function () {
         remove_tocible();
-        console.log('remove_tocible');
-      });      
+        // console.log('remove_tocible');
+      });
     });
 
   });
