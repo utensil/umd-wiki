@@ -1,2 +1,2 @@
 src/vendor/**/*.js
-src/plugins/**/*.js
+#src/plugins/**/*.js

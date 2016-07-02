@@ -1,4 +1,4 @@
-$.md.stage('pregimmick').subscribe(function(done) {
+$.md.stage('pregimmick').subscribe(function (done) {
   var links = $('#md-content a')
 
   var baseUrl = window.$.md.config.baseUrl

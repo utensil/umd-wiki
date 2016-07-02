@@ -8,6 +8,8 @@ module.exports = {
   ],
   // add your custom rules here
   'rules': {
+    // the dot in a member expression should be on the same line as the object portion
+    'dot-location': ['error', 'object'],
     // allow paren-less arrow functions
     'arrow-parens': 0,
     // allow debugger during development
