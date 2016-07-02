@@ -1,4 +1,4 @@
-<template lang="jade">
+<template lang="pug">
 #md-all
   #md-menu
     nav.navbar.navbar-fixed-top.navbar-dark.bg-inverse
