@@ -1,18 +1,13 @@
-$.md.stage('pregimmick').subscribe(function (done) {
-  var baseUrl = window.$.md.config.baseUrl
+$.md.stage('pregimmick').subscribe((done) => {
+  let baseUrl = window.$.md.config.baseUrl
+  let currentMdUrlBase = window.location.hash.replace(/[^/]+\.md/, '')
 
-  // console.log('baseUrl', baseUrl)
+  let processUrl = (url) => {
+    let isExternalLink = /:\/\//.test(url)
+    let isMdLink = /\.md$/.test(url)
+    let isAnchor = /^#/.test(url)
 
-  var currentMdUrlBase = window.location.hash.replace(/[^/]+\.md/, '')
-
-  // console.log('currentMdUrlBase', currentMdUrlBase)
-
-  var processUrl = function (url) {
-    var isExternalLink = /:\/\//.test(url)
-    var isMdLink = /\.md$/.test(url)
-    var isAnchor = /^#/.test(url)
-
-    var ret = {
+    let ret = {
       url: url
     }
 
@@ -30,9 +25,9 @@ $.md.stage('pregimmick').subscribe(function (done) {
   }
 
   $('#md-content a').each(function (index, linkElement) {
-    var url = $(linkElement).attr('href')
+    let url = $(linkElement).attr('href')
     // console.log('link:', url)
-    var urlInfo = processUrl(url)
+    let urlInfo = processUrl(url)
 
     $(linkElement).attr('href', urlInfo.url)
     if (urlInfo.target) {
@@ -41,9 +36,9 @@ $.md.stage('pregimmick').subscribe(function (done) {
   })
 
   $('#md-content img').each(function (index, linkElement) {
-    var url = $(linkElement).attr('src')
+    let url = $(linkElement).attr('src')
     // console.log('image:', url)
-    var urlInfo = processUrl(url)
+    let urlInfo = processUrl(url)
 
     $(linkElement).attr('src', urlInfo.url)
   })

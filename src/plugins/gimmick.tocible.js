@@ -1,4 +1,4 @@
-$.md.stage('pregimmick').subscribe(function (done) {
+$.md.stage('pregimmick').subscribe((done) => {
   function prepareTocible () {
     // let #md-content make way for toc siderbar
     $('#md-content').
@@ -24,8 +24,8 @@ $.md.stage('pregimmick').subscribe(function (done) {
   $('#md-content-row .ref').remove()
 
   // .9375rem
-  var ONE_REM_IN_PX = 60
-  var LEFT_MARGIN_IN_PX = ONE_REM_IN_PX
+  const ONE_REM_IN_PX = 60
+  const LEFT_MARGIN_IN_PX = ONE_REM_IN_PX
 
   $('#md-content-row').
     prepend(
@@ -54,7 +54,7 @@ $.md.stage('pregimmick').subscribe(function (done) {
     })
 
     setTimeout(function () {
-      var headingCount = $('.tocible > ul > li.tocible_heading').length
+      let headingCount = $('.tocible > ul > li.tocible_heading').length
 
       // do not show tocible if there's no section at all
       if (headingCount < 1) {
@@ -64,9 +64,8 @@ $.md.stage('pregimmick').subscribe(function (done) {
       }
 
       // click the arrow on tocible makes it disappear
-      $('.tocible_header').click(function () {
+      $('.tocible_header').click(() => {
         removeTocible()
-        // console.log('removeTocible')
       })
     })
   })
