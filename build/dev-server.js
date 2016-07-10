@@ -48,7 +48,7 @@ if (hasWikiDirectory) {
 
 // customization: mock config.json
 var baseUrl = (hasWikiDirectory ? TEST_WIKI_PATH : 'static')
-app.get('/config.json', function(req, res){
+app.get('/config.json', function (req, res) {
   res.json({
     useSideMenu: true,
     lineBreaks: 'gfm',
@@ -57,14 +57,16 @@ app.get('/config.json', function(req, res){
     title: 'Ultra Markdown Wiki',
     showSearch: false,
     baseUrl: baseUrl
-  });
-})
+  })
+});
 
 // mock xls file
-app.get(['', baseUrl, 'test.xls'].join('/'), function(req, res){
-  res.sendFile('./static/test.xls', {
-    root: process.cwd()
-  });
+['test.xls', '测试.xls'].forEach(function (xlsFile) {
+  app.get(['', baseUrl, encodeURI(xlsFile)].join('/'), function (req, res) {
+    res.sendFile('./static/' + xlsFile, {
+      root: process.cwd()
+    })
+  })
 })
 
 app.listen(8080, function (err) {

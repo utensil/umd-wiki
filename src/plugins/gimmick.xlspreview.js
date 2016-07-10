@@ -72,15 +72,17 @@ function renderWorkbook (href, workbook, opts, cb) {
 
   let index = 0
 
+  console.debug('opts = ', opts)
+
   $.each(workbook, function (sheetName) {
     let sheetId = href + '-' + sheetName
     sheetId = sheetId.replace(/[-.#&/\\ \t]+/g, '')
 
     tabNav.append(
-      $('<li></li>').
+      $('<li class="nav-item"></li>').
         addClass(index === opts.tab ? 'active' : '').
         append(
-            $('<a></a>').
+            $('<a class="nav-link"></a>').
               text(sheetName).
               attr('href', '#' + sheetId).
               attr('data-toggle', 'tab')
@@ -89,16 +91,21 @@ function renderWorkbook (href, workbook, opts, cb) {
 
     let tb = workbook[sheetName]
 
+    console.debug(tb)
+
     let table = $('<table class="table table-bordered table-hover table-condensed table-striped"></table>')
 
     let thead = $('<thead></thead>')
 
-    let maxCol = Math.min(tb.range.w, opts.maxColol)
+    console.debug('maxCol = min of ', tb.range.w, opts.maxCol)
+
+    let maxCol = Math.min(tb.range.w, opts.maxCol)
 
     for (let r = 0; r < tb.header.length; r++) {
       let tr = $('<tr></tr>')
 
       for (let c = 0; c < maxCol; c++) {
+        console.debug('header', r, c, tb.header[r][c])
         tr.append($('<th></th>').text(tb.header[r][c]))
       }
 
@@ -113,6 +120,7 @@ function renderWorkbook (href, workbook, opts, cb) {
       let tr = $('<tr></tr>')
 
       for (let c = 0; c < maxCol; c++) {
+        console.debug('body', r, c, tb.body[r][c])
         tr.append($('<td></td>').text(tb.body[r][c]))
       }
 
@@ -159,20 +167,31 @@ function renderWorkbook (href, workbook, opts, cb) {
   }
 }
 
-fetch('wiki/test.xls').then(res => {
-  res.arrayBuffer().then(a => {
-    let data = new Uint8Array(a)
-    let arr = []
-    for (let i = 0; i !== data.length; ++i) {
-      arr[i] = String.fromCharCode(data[i])
-    }
-    let b = arr.join('')
-    let workbook = XLS.read(b, {type: 'binary'})
+const TEST_XLS_FILE_NAME = 'wiki/测试.xls'
+$.md.stage('pregimmick').subscribe((done) => {
+  fetch(encodeURI(TEST_XLS_FILE_NAME)).then(res => {
+    res.arrayBuffer().then(a => {
+      let data = new Uint8Array(a)
+      let arr = []
+      for (let i = 0; i !== data.length; ++i) {
+        arr[i] = String.fromCharCode(data[i])
+      }
+      let b = arr.join('')
+      let workbook = XLS.read(b, {type: 'binary'})
+      let opts = {
+        text: '<i class="fa fa-download"></i>',
+        preview: '<i class="fa fa-eye"></i>',
+        open: 'toggle',
+        headerRowCount: 1,
+        maxCol: 20,
+        tab: 0
+      }
 
-    renderWorkbook('wiki/test.xls', workbook2Json(workbook), {}, (preview) => {
-      console.log('xls', preview.html())
-      // TODO
-      // $('#md-content-row').prepend(preview)
+      renderWorkbook(TEST_XLS_FILE_NAME, workbook2Json(workbook, opts), opts, (preview) => {
+        console.log('xls', preview.html())
+        $('article#preview.markdown-body').prepend(preview.html())
+        done()
+      })
     })
   })
 })
