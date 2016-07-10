@@ -116,12 +116,11 @@ export class NavigationBarParser {
   constructor () {
     this.md = new MarkdownIt(MD_OPTIONS)
 
-    let md = this.md
-    let self = this
-
-    md.renderer.rules
-
-    self
+    // let md = this.md
+    // let self = this
+    //
+    // md.renderer.rules
+    // self
   }
 
   parse (navigationMarkdownText) {
@@ -137,6 +136,7 @@ export class NavigationBarParser {
   getTitle (ast) {
     let state = {}
 
+    // the first h1 element is considered to be the title
     let titleToken = ast.find(token => {
       if (state.hasHitFirstH1 && token.type === 'inline') {
         state.hasHitFirstH1 = false
@@ -157,64 +157,29 @@ export class NavigationBarParser {
     let state = {
       // the count of menus including current
       // can also be used as next menu index
-      menuCount: 0
+      menuCount: 0,
+      currentMenu: null,
+      isInParagraph: false,
+      isInBulletList: false,
+      isInItem: false,
+      isInHeader: false,
+      menus: []
     }
 
-    let menus = []
+    let menus = state.menus
     ast.forEach(token => {
       NavigationBarParser.updateStateByToken(state, token)
 
-      if (!state.isInBulletList && state.isInParagraph && token.type === 'inline'
-        && _.isArray(token.children) && token.children.length === 3
-        && token.children[0].type === 'link_open' && token.children[1].type === 'text') {
-        state.currentMenu = menus[state.menuCount] = {
-          title: token.children[1].content || '',
-          items: []
-        }
-        state.menuCount += 1
-      }
+      NavigationBarParser.createMenuIfPresent(state, token)
 
       let currentMenu = state.currentMenu
-
-      // TODO code clean up and document, it works, but it's a mess
       if (currentMenu && _.isArray(currentMenu.items)) {
-        if (state.isInBulletList && state.isInItem) {
-          if (token.type === 'inline') {
-            if (state.isInHeader) {
-              currentMenu.items.push({
-                type: 'header',
-                text: this.renderMenuItemContent(token)
-              })
-            } else if (_.isArray(token.children) && token.children.length >= 3
-              && token.children[0].type === 'link_open') {
-              let item = {
-                type: 'link',
-                text: this.renderMenuItemContent(token),
-                href: token.children[0].attrs.find(v => {
-                  return _.isArray(v) && v.length === 2 && v[0] === 'href'
-                })[1]
-              }
-
-              // TODO move into a plugin/filter
-              let isExternalLink = /^http[s]?:\/\//.test(item.href)
-
-              if (isExternalLink) {
-                item.external = true
-              }
-
-              if (/\.md$/.test(item.href) && !isExternalLink) {
-                item.href = `#!${item.href}`
-              }
-
-              currentMenu.items.push(item)
-            }
-          } else {
-            // ignore
-          }
-        } else if (token.type === 'hr') {
+        if (token.type === 'hr') {
           currentMenu.items.push({
             type: 'hr'
           })
+        } else {
+          this.createMenuItemIfPresent(state, token)
         }
       }
     })
@@ -256,10 +221,100 @@ export class NavigationBarParser {
     }
   }
 
+  static isValidMenu (state, token) {
+    const hasGimmick = (tokens) => {
+      let gimmickContent = _.find(tokens, (t) => {
+        return /^gimmick/.test(t.content)
+      })
+
+      return gimmickContent != null
+    }
+
+    return !state.isInBulletList && state.isInParagraph
+      && token.type === 'inline'
+      && _.isArray(token.children) && token.children.length === 3
+      && token.children[0].type === 'link_open'
+      && token.children[1].type === 'text'
+      && token.children[2].type === 'link_close'
+      // TODO ignore gimmick for now
+      && !hasGimmick(token.children)
+  }
+
+  static isValidMenuItem (token) {
+    return _.isArray(token.children)
+      // a links consists of 3 children: open, content and close
+      && token.children.length >= 3
+      && token.children[0].type === 'link_open'
+  }
+
+  static createMenuIfPresent (state, token) {
+    if (NavigationBarParser.isValidMenu(state, token)) {
+      state.currentMenu = state.menus[state.menuCount] = {
+        // token.children[1] is safe when the menu is valid
+        title: token.children[1].content || '',
+        items: []
+      }
+      state.menuCount += 1
+    }
+  }
+
+  createMenuItemIfPresent (state, token) {
+    let currentMenu = state.currentMenu
+    if (state.isInBulletList && state.isInItem && token.type === 'inline') {
+      if (state.isInHeader) {
+        currentMenu.items.push({
+          type: 'header',
+          text: this.renderMenuItemContent(token)
+        })
+      } else if (NavigationBarParser.isValidMenuItem(token)) {
+        let item = this.createMenuItemFromLink(token)
+        if (item) {
+          currentMenu.items.push(item)
+        }
+      } else {
+        // ignore
+      }
+    }
+  }
+
+  createMenuItemFromLink (token) {
+    let item = {
+      type: 'link',
+      text: this.renderMenuItemContent(token),
+      // every attr is an array of 2 elements: key and value
+      href: token.children[0].attrs.find(v => {
+        return _.isArray(v) && v.length === 2 && v[0] === 'href'
+      })[1]
+    }
+
+    // log('createMenuItemFromLink', token, item)
+
+    // TODO move into a plugin/filter
+    let isExternalLink = /^http[s]?:\/\//.test(item.href)
+
+    if (isExternalLink) {
+      item.external = true
+    }
+
+    if (/\.md$/.test(item.href) && !isExternalLink) {
+      item.href = `#!${item.href}`
+    }
+
+    // TODO ignore gimmick for now
+    if (/^gimmick/.test(item.href)) {
+      return null
+    }
+
+    return item
+  }
+
   renderMenuItemContent (token) {
     if (_.isArray(token.children)) {
       let markup = token.children.map(t => {
         if (!/^link_/.test(t.type)) {
+          // log('renderMenuItemContent', `${t.content}-------${t.markup}`)
+          // FIXME it seems wrong to just join them together,
+          // possibly they never appear at the same time?
           return `${t.content}${t.markup}`
         } else {
           return ''
@@ -268,7 +323,10 @@ export class NavigationBarParser {
 
       return this.md.renderInline(markup)
     } else {
+      // ignore those don't look like a menu item
+      log('renderMenuItemContent', 'ignoring', token)
       return ''
+      // return this.md.renderInline(token.text)
     }
   }
 }
