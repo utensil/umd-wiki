@@ -38,14 +38,19 @@ $.md.stage('pregimmick').subscribe((done) => {
     } else {
       if (!isAnchor) {
         if (isMdLink) {
-          ret.url = (currentMdUrlBase + url).replace(/\/\//g, '/')
+          ret.url = `#!${currentMdUrlBase}${url}`.replace(/\/{2,}/g, '/')
         } else {
-          ret.url = (baseUrl + '/' + currentMdUrlBase.replace('#!', '') + url).replace(/\/\//g, '/')
+          ret.url = (baseUrl + '/' + currentMdUrlBase.replace('#!', '') + url).replace(/\/{2,}/g, '/')
         }
       }
     }
     return ret
   }
+
+  // console.debug('linkfixer test', '/dummy.md', processUrl('/dummy.md'))
+  // console.debug('linkfixer test', '/dummy.jpg', processUrl('/dummy.jpg'))
+  // console.debug('linkfixer test', '#标题', processUrl('#标题'))
+  // console.debug('linkfixer test', 'https://github.com/', processUrl('https://github.com/'))
 
   $('#md-content a').each((index, linkElement) => {
     let url = $(linkElement).attr('href')
