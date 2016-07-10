@@ -1,4 +1,4 @@
-body {
+html {
   font-size: 14px;
 }
 
@@ -28,5 +28,5 @@ body {
 
 #md-content-row .markdown-body {
   padding-top: 0.7em;
-  font-size: 14px;
+  font-size: 1rem;
 }
