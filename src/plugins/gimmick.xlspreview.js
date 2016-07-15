@@ -1,6 +1,6 @@
 const XLS = require('xlsx')
 
-function sheet2RowArray (sheet, opts) {
+const sheet2RowArray = (sheet, opts) => {
   let val, row, r, isempty, R, C, v
   let header = []
   let body = []
@@ -55,7 +55,7 @@ function sheet2RowArray (sheet, opts) {
   return out
 }
 
-function workbook2Json (workbook, opts) {
+const workbook2Json = (workbook, opts) => {
   let result = {}
   workbook.SheetNames.forEach((sheetName) => {
     let roa = sheet2RowArray(workbook.Sheets[sheetName], opts)
@@ -66,7 +66,7 @@ function workbook2Json (workbook, opts) {
   return result
 }
 
-function renderWorkbook (href, workbook, opts, cb) {
+const renderWorkbook = (href, workbook, opts, cb) => {
   let tabNav = $('<ul class="nav nav-tabs" role="tablist"></ul>')
   let tabContent = $('<div class="tab-content"></div>')
 
@@ -92,7 +92,7 @@ function renderWorkbook (href, workbook, opts, cb) {
 
     let tb = workbook[sheetName]
 
-    console.debug(tb)
+    // console.debug(tb)
 
     let table = $('<table class="table table-hover table-sm table-striped"></table>')
 
@@ -106,7 +106,7 @@ function renderWorkbook (href, workbook, opts, cb) {
       let tr = $('<tr></tr>')
 
       for (let c = 0; c < maxCol; c++) {
-        console.debug('header', r, c, tb.header[r][c])
+        // console.debug('header', r, c, tb.header[r][c])
         tr.append($('<th></th>').text(tb.header[r][c]))
       }
 
@@ -121,7 +121,7 @@ function renderWorkbook (href, workbook, opts, cb) {
       let tr = $('<tr></tr>')
 
       for (let c = 0; c < maxCol; c++) {
-        console.debug('body', r, c, tb.body[r][c])
+        // console.debug('body', r, c, tb.body[r][c])
         tr.append($('<td></td>').text(tb.body[r][c]))
       }
 
@@ -156,16 +156,23 @@ function renderWorkbook (href, workbook, opts, cb) {
   // do not show tabs if there's only one tab
   if (index === 1) {
     tabNav.hide()
+  } else {
+    // FIXME the tabs don't work except for the first
+    $('a', tabNav).click(function (e) {
+      e.preventDefault()
+      // $(this).tab('show')
+    })
   }
 
   if (cb) {
+    // console.debug(preview)
     cb(preview)
   }
 }
 
-const TEST_XLS_FILE_NAME = 'wiki/测试.xls'
-$.md.stage('pregimmick').subscribe((done) => {
-  fetch(encodeURI(TEST_XLS_FILE_NAME)).then(res => {
+const fetchAndRenderXls = (href, opts, cb) => {
+  // console.debug('fetching', href)
+  fetch(href).then(res => {
     res.arrayBuffer().then(a => {
       let data = new Uint8Array(a)
       let arr = []
@@ -174,20 +181,115 @@ $.md.stage('pregimmick').subscribe((done) => {
       }
       let b = arr.join('')
       let workbook = XLS.read(b, {type: 'binary'})
-      let opts = {
-        text: '<i class="fa fa-download"></i>',
-        preview: '<i class="fa fa-eye"></i>',
-        open: 'toggle',
-        headerRowCount: 1,
-        maxCol: 20,
-        tab: 0
-      }
-
-      renderWorkbook(TEST_XLS_FILE_NAME, workbook2Json(workbook, opts), opts, (preview) => {
-        console.log('xls', preview.html())
-        $('article#preview.markdown-body').prepend(preview)
-        done()
-      })
+      let callback = _.isFunction(cb) ? cb : () => {}
+      let wb = workbook2Json(workbook, opts)
+      // console.debug('fetched', href, res, wb)
+      renderWorkbook(href, wb, opts, callback)
     })
   })
+}
+
+$.md.stage('pregimmick').subscribe((done) => {
+  let xlsPreviewGimmick = {
+    name: 'xlspreview',
+    version: $.md.version,
+    once: function () {
+      $.md.linkGimmick(this, 'xlspreview', xlsPreview)
+    }
+  }
+  $.md.registerGimmick(xlsPreviewGimmick)
+
+  function xlsPreview ($links, opts, href) {
+    // console.debug($links, opts, href)
+    opts.text = opts.text || '<i class="fa fa-download"></i>&nbsp;'
+    opts.preview = opts.preview || '<i class="fa fa-eye"></i>&nbsp;'
+    opts.open = opts.open || 'auto' // or 'toggle'
+    opts.headerRowCount = opts.header_row_count || 1
+    opts.maxCol = opts.max_col || 20
+    opts.tab = opts.tab || 0
+
+    if (!href.endsWith('/')) {
+      href += '/'
+    }
+
+    return $links.each(function (i, link) {
+      var href = $(link).attr('href')
+      // console.log(i, link, href)
+      if (opts.open === 'toggle') {
+        // console.debug('xlspreview: toggle')
+        let previewButton = $('<a class="btn btn-secondary"></a>')
+        let renderedPreview = null
+
+        previewButton.
+          html(opts.preview).
+          css('margin-left', '1em')
+
+        $(link).after(previewButton)
+
+        previewButton.
+          click(function (e) {
+            if (renderedPreview && renderedPreview !== '') {
+              renderedPreview.toggle()
+            } else if (renderedPreview === '') {
+              return
+            } else {
+              previewButton.html(opts.preview + '<i class="fa fa-spinner fa-spin"></i>')
+              renderedPreview = ''
+
+              fetchAndRenderXls(href, opts, function (preview) {
+                renderedPreview = preview
+                previewButton.after(renderedPreview)
+                previewButton.html(opts.preview)
+              })
+            }
+          })
+      } else /* if (opts.open === 'toggle') */ {
+        // console.debug('xlspreview: auto')
+        fetchAndRenderXls(href, opts, function (preview) {
+          // console.debug('fetchAndRenderXls', href, link, preview)
+          $(link).after(preview)
+        })
+      }
+
+      // the link itself becomes a download button
+      $(link).
+        html(opts.text || href).
+        addClass('btn').
+        addClass('btn-secondary')
+
+      if (opts.open !== 'toggle') {
+        $(link).css({
+          float: 'right'
+        })
+      }
+    })
+  }
+  done()
 })
+//   const TEST_XLS_FILE_NAME = 'wiki/测试.xls'
+//   fetch(encodeURI(TEST_XLS_FILE_NAME)).then(res => {
+//     res.arrayBuffer().then(a => {
+//       let data = new Uint8Array(a)
+//       let arr = []
+//       for (let i = 0; i !== data.length; ++i) {
+//         arr[i] = String.fromCharCode(data[i])
+//       }
+//       let b = arr.join('')
+//       let workbook = XLS.read(b, {type: 'binary'})
+//       let opts = {
+//         text: '<i class="fa fa-download"></i>',
+//         preview: '<i class="fa fa-eye"></i>',
+//         open: 'toggle',
+//         headerRowCount: 1,
+//         maxCol: 20,
+//         tab: 0
+//       }
+//
+//       renderWorkbook(TEST_XLS_FILE_NAME, workbook2Json(workbook, opts), opts, (preview) => {
+//         console.log('xls', preview.html())
+//         $('article#preview.markdown-body').prepend(preview)
+//         done()
+//       })
+//     })
+//   })
+// })

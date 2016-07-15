@@ -56,3 +56,7 @@ html {
 #md-content-row .markdown-body .xls-preview .table {
   display: table;
 }
+
+#md-content-row .markdown-body a.btn {
+    color: inherit;
+}
