@@ -67,7 +67,7 @@ function workbook2Json (workbook, opts) {
 }
 
 function renderWorkbook (href, workbook, opts, cb) {
-  let tabNav = $('<ul class="nav nav-tabs"></ul>')
+  let tabNav = $('<ul class="nav nav-tabs" role="tablist"></ul>')
   let tabContent = $('<div class="tab-content"></div>')
 
   let index = 0
@@ -80,9 +80,10 @@ function renderWorkbook (href, workbook, opts, cb) {
 
     tabNav.append(
       $('<li class="nav-item"></li>').
-        addClass(index === opts.tab ? 'active' : '').
+        // addClass(index === opts.tab ? 'active' : '').
         append(
-            $('<a class="nav-link"></a>').
+            $('<a class="nav-link" role="tab"></a>').
+              addClass(index === opts.tab ? 'active' : '').
               text(sheetName).
               attr('href', '#' + sheetId).
               attr('data-toggle', 'tab')
@@ -93,11 +94,11 @@ function renderWorkbook (href, workbook, opts, cb) {
 
     console.debug(tb)
 
-    let table = $('<table class="table table-bordered table-hover table-condensed table-striped"></table>')
+    let table = $('<table class="table table-hover table-sm table-striped"></table>')
 
     let thead = $('<thead></thead>')
 
-    console.debug('maxCol = min of ', tb.range.w, opts.maxCol)
+    // console.debug('maxCol = min of ', tb.range.w, opts.maxCol)
 
     let maxCol = Math.min(tb.range.w, opts.maxCol)
 
@@ -134,7 +135,7 @@ function renderWorkbook (href, workbook, opts, cb) {
     })
 
     tabContent.append(
-      $('<div class="tab-pane"></div>').
+      $('<div class="tab-pane" role="tabpanel"></div>').
         addClass(index === opts.tab ? 'active' : '').
         attr('id', sheetId).
         append(
@@ -152,14 +153,9 @@ function renderWorkbook (href, workbook, opts, cb) {
       append(tabNav).
       append(tabContent)
 
-  // only one tab
+  // do not show tabs if there's only one tab
   if (index === 1) {
     tabNav.hide()
-  } else {
-    $('a', tabNav).click(function (e) {
-      e.preventDefault()
-      $(this).tab('show')
-    })
   }
 
   if (cb) {
@@ -189,7 +185,7 @@ $.md.stage('pregimmick').subscribe((done) => {
 
       renderWorkbook(TEST_XLS_FILE_NAME, workbook2Json(workbook, opts), opts, (preview) => {
         console.log('xls', preview.html())
-        $('article#preview.markdown-body').prepend(preview.html())
+        $('article#preview.markdown-body').prepend(preview)
         done()
       })
     })

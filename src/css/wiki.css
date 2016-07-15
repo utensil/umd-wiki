@@ -2,6 +2,24 @@ html {
   font-size: 14px;
 }
 
+#md-content-row .markdown-body {
+  padding-top: 0.7em;
+  font-size: 1rem;
+}
+
+#md-content-row .markdown-body h1 {
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+#md-content-row .markdown-body list-group a {
+  color: black;
+}
+
+/*
+  For built-in plugin tocible
+*/
+
 #md-content-row .tocible {
   font-family: Microsoft YaHei;
   font-size: 0.9rem;
@@ -17,16 +35,24 @@ html {
   color: #333;
 }
 
-.list-group a {
-  color: black;
+/*
+  For built-in plugin xlspreview
+
+  TODO add .xlspreview
+*/
+
+#md-content-row .markdown-body a.nav-link:hover {
+  text-decoration: none;
 }
 
-#md-content-row .markdown-body h1 {
-  padding-top: 0px;
-  margin-top: 0px;
+#md-content-row .markdown-body .xls-preview .nav.nav-tabs {
+  margin-bottom: 0;
 }
 
-#md-content-row .markdown-body {
-  padding-top: 0.7em;
-  font-size: 1rem;
+#md-content-row .markdown-body .xls-preview a.nav-link {
+  color: #55595c;
+}
+
+#md-content-row .markdown-body .xls-preview .table {
+  display: table;
 }
