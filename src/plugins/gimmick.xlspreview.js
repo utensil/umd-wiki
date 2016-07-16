@@ -72,11 +72,11 @@ const renderWorkbook = (href, workbook, opts, cb) => {
 
   let index = 0
 
-  console.debug('opts = ', opts)
+  // console.debug('opts = ', opts)
 
   $.each(workbook, function (sheetName) {
-    let sheetId = href + '-' + sheetName
-    sheetId = sheetId.replace(/[-.#&/\\ \t]+/g, '')
+    let sheetId = href + '-' + index
+    sheetId = sheetId.replace(/[.#&/\\ \t]+/g, '')
 
     tabNav.append(
       $('<li class="nav-item"></li>').
@@ -158,9 +158,12 @@ const renderWorkbook = (href, workbook, opts, cb) => {
     tabNav.hide()
   } else {
     // FIXME the tabs don't work except for the first
-    $('a', tabNav).click(function (e) {
+    $('a', tabNav).click((e) => {
       e.preventDefault()
+      console.debug(e)
+      $(e.target).tab('show')
       // $(this).tab('show')
+      return false
     })
   }
 
