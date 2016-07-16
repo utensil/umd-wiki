@@ -33,7 +33,7 @@ export const init = () => {
         // log('$links.each', i, link)
         let $link = $(link)
         try {
-          let opts = Gimmick.parse($link.text())
+          let opts = Gimmick.parseLink($link.text())
           let href = $link.attr('href')
           render($link, opts, href)
         } catch (e) {
