@@ -1,4 +1,5 @@
 import {stage} from './lib/stage'
+import Gimmick from './lib/gimmick'
 const log = debug('init')
 
 export const init = () => {
@@ -26,13 +27,13 @@ export const init = () => {
         // log('linkGimmick', 'render is not a function')
         return
       }
-      let $links = $(`a:contains('gimmick:${name}')`)
+      let $links = $(`#md-content a:contains('gimmick:${name}')`)
       // log($links)
       $links.each((i, link) => {
         // log('$links.each', i, link)
         let $link = $(link)
         try {
-          let opts = {} // TODO Gimmick.parse($link.text())
+          let opts = Gimmick.parse($link.text())
           let href = $link.attr('href')
           render($link, opts, href)
         } catch (e) {
