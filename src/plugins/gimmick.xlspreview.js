@@ -75,8 +75,8 @@ const renderWorkbook = (href, workbook, opts, cb) => {
   // console.debug('opts = ', opts)
 
   $.each(workbook, function (sheetName) {
-    let sheetId = href + '-' + index
-    sheetId = sheetId.replace(/[.#&/\\ \t]+/g, '')
+    let sheetId = href + 'III' + index
+    sheetId = sheetId.replace(/[-%.#&/\\ \t]+/g, '')
 
     tabNav.append(
       $('<li class="nav-item"></li>').
@@ -156,15 +156,6 @@ const renderWorkbook = (href, workbook, opts, cb) => {
   // do not show tabs if there's only one tab
   if (index === 1) {
     tabNav.hide()
-  } else {
-    // FIXME the tabs don't work except for the first
-    $('a', tabNav).click((e) => {
-      e.preventDefault()
-      console.debug(e)
-      $(e.target).tab('show')
-      // $(this).tab('show')
-      return false
-    })
   }
 
   if (cb) {
@@ -269,30 +260,3 @@ $.md.stage('pregimmick').subscribe((done) => {
   }
   done()
 })
-//   const TEST_XLS_FILE_NAME = 'wiki/测试.xls'
-//   fetch(encodeURI(TEST_XLS_FILE_NAME)).then(res => {
-//     res.arrayBuffer().then(a => {
-//       let data = new Uint8Array(a)
-//       let arr = []
-//       for (let i = 0; i !== data.length; ++i) {
-//         arr[i] = String.fromCharCode(data[i])
-//       }
-//       let b = arr.join('')
-//       let workbook = XLS.read(b, {type: 'binary'})
-//       let opts = {
-//         text: '<i class="fa fa-download"></i>',
-//         preview: '<i class="fa fa-eye"></i>',
-//         open: 'toggle',
-//         headerRowCount: 1,
-//         maxCol: 20,
-//         tab: 0
-//       }
-//
-//       renderWorkbook(TEST_XLS_FILE_NAME, workbook2Json(workbook, opts), opts, (preview) => {
-//         console.log('xls', preview.html())
-//         $('article#preview.markdown-body').prepend(preview)
-//         done()
-//       })
-//     })
-//   })
-// })
