@@ -69,10 +69,12 @@ app.get('/config.json', function (req, res) {
   })
 })
 
-app.listen(8080, function (err) {
+var port = process.env['PORT'] || 8080
+
+app.listen(port, function (err) {
   if (err) {
     console.log(err)
     return
   }
-  console.log('Listening at http://localhost:8080')
+  console.log('Listening at http://localhost:' + port)
 })

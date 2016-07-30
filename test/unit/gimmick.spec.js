@@ -24,7 +24,7 @@ describe('Gimmick', () => {
     let result = Gimmick.parseLink(`${GIMMICK_NAME}("open": 'toggle', "Foo-12_3": 126, blah: "buzz")`)
     expect(result).toEqual({ open: 'toggle', 'Foo-12_3': 126, blah: 'buzz' })
   })
-  
+
   it('should not parse malformed options', () => {
     let result = Gimmick.parseLink(`${GIMMICK_NAME}(ZIRueieu989!(@*$^*#()))`)
     expect(result).toEqual({})
