@@ -40,6 +40,7 @@ require('script!./plugins/gimmick.title.js')
 require('script!./plugins/gimmick.linkfixer.js')
 require('script!./plugins/gimmick.tocible.js')
 require('./plugins/gimmick.xlspreview.js')
+require('script!./plugins/gimmick.resloader.js')
 require('./css/wiki.css')
 
 log('Vue.config', Vue.config)

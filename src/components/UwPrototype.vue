@@ -79,11 +79,36 @@ export default {
           // log('render markdown', t)
           // window.mdc.init(t, false)
           let mdc = window.mdc
-          // let oldImageRenderRule = mdc.renderer.rules.image
-          // mdc.renderer.rules.image = function (e, t, n, r, i) {
-          //   log('render image', e, t, n, r, i)
-          //   return oldImageRenderRule(e, t, n, r, i)
+          let renderer = mdc.renderer
+
+          // let oldRenderInline = renderer.renderInline.bind(renderer)
+          // renderer.renderInline = function (tokens, options, env) {
+          //   if (/image/.test(tokens[0].type)) {
+          //     log('renderInline', tokens, env)
+          //   }
+          //   return oldRenderInline(tokens, options, env)
           // }
+
+          let oldImageRenderRule = renderer.rules.image.bind(renderer)
+
+          // log('mdc.renderer.rules.image', oldImageRenderRule)
+
+          renderer.rules.image = function (tokens, idx, options, env, slf) {
+            log('mdc.renderer.rules.image', tokens[idx])
+
+            var token = tokens[idx]
+
+            let srcIndex = token.attrIndex('src')
+
+            log('srcIndex', srcIndex)
+
+            if (srcIndex >= 0) {
+              token.attrs[srcIndex][0] = 'data-img-src'
+            }
+
+            return oldImageRenderRule(tokens, idx, options, env, slf)
+          }
+
           // let oldRenderToken = mdc.renderer.renderToken
           // mdc.renderer.renderToken = function (e, t, n) {
           //   log('render token', e, t, n)

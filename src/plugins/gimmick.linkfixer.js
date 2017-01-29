@@ -75,7 +75,7 @@ $.md.stage('pregimmick').subscribe((done) => {
   })
 
   $('#md-content img').each((index, linkElement) => {
-    let url = $(linkElement).attr('src')
+    let url = $(linkElement).attr('data-img-src') || $(linkElement).attr('src')
     // console.log('image:', url)
     let urlInfo = processUrl(url)
 
