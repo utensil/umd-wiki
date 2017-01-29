@@ -56,7 +56,11 @@ app.get('/config.json', function (req, res) {
     anchorCharacter: '&#x2693;',
     title: 'Ultra Markdown Wiki',
     showSearch: false,
-    baseUrl: baseUrl
+    baseUrl: baseUrl,
+    resources: {
+      css: ['custom.css'],
+      js: ['custom.js']
+    }
   })
 });
 
